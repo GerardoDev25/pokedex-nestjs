@@ -51,29 +51,34 @@ export class PokemonService {
       const pokemon = await this.pokemonModel.create(data);
       return pokemon;
     } catch (error) {
-      if (error.code === 11000) {
-        throw new BadRequestException(
-          `item exist in the database please made sure name and no be diferent`,
-        );
-      }
-      console.error(error);
-      throw new InternalServerErrorException(
-        `can't create pokemon - check server logs`,
-      );
+      this.handleException(error);
     }
   }
 
   async update(term: string, data: UpdatePokemonDto) {
-    const pokemon = await this.findOne(term);
-
-    if (data.name) data.name = data.name.toLowerCase();
-
-    await pokemon.updateOne(data);
-
-    return { ...pokemon.toJSON(), ...data };
+    try {
+      if (data.name) data.name = data.name.toLowerCase();
+      const pokemon = await this.findOne(term);
+      await pokemon.updateOne(data);
+      return { ...pokemon.toJSON(), ...data };
+    } catch (error) {
+      this.handleException(error);
+    }
   }
 
   remove(id: number) {
     return `This action removes a #${id} pokemon`;
+  }
+
+  private handleException(error) {
+    if (error.code === 11000) {
+      throw new BadRequestException(
+        `item exist in the database please made sure name and no be diferent`,
+      );
+    }
+    console.error(error);
+    throw new InternalServerErrorException(
+      `can't create pokemon - check server logs`,
+    );
   }
 }
