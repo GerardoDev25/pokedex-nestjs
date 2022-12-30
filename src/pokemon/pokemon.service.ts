@@ -27,7 +27,7 @@ export class PokemonService {
     if (!isNaN(+term)) {
       pokemon = await this.pokemonModel.findOne({ no: term });
     }
-    if (isValidObjectId(term)) {
+    if (!pokemon && isValidObjectId(term)) {
       pokemon = await this.pokemonModel.findById(term);
     }
 
@@ -63,8 +63,14 @@ export class PokemonService {
     }
   }
 
-  update(id: number, data: UpdatePokemonDto) {
-    return `This action updates a #${id} pokemon`;
+  async update(term: string, data: UpdatePokemonDto) {
+    const pokemon = await this.findOne(term);
+
+    if (data.name) data.name = data.name.toLowerCase();
+
+    await pokemon.updateOne(data);
+
+    return { ...pokemon.toJSON(), ...data };
   }
 
   remove(id: number) {
