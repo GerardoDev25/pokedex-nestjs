@@ -12,11 +12,12 @@ export class PokemonService {
     return `This action returns a #${id} pokemon`;
   }
 
-  create(createPokemonDto: CreatePokemonDto) {
-    return 'This action adds a new pokemon';
+  create(data: CreatePokemonDto) {
+    data.name = data.name.toLowerCase();
+    return data;
   }
 
-  update(id: number, updatePokemonDto: UpdatePokemonDto) {
+  update(id: number, data: UpdatePokemonDto) {
     return `This action updates a #${id} pokemon`;
   }
 
