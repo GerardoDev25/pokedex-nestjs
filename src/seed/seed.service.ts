@@ -5,6 +5,7 @@ import axios, { AxiosInstance } from 'axios';
 
 import { Pokemon } from 'src/pokemon/entities/pokemon.entity';
 import { PokeResponse } from './interfaces/poke-response.interface';
+import { CreatePokemonDto } from 'src/pokemon/dto/create-pokemon.dto';
 
 @Injectable()
 export class SeedService {
@@ -15,16 +16,20 @@ export class SeedService {
   ) {}
 
   async executeSeed() {
+    await this.pokemonModel.deleteMany();
     const { data } = await this.axios.get<PokeResponse>(
-      'https://pokeapi.co/api/v2/pokemon?limit=10',
+      'https://pokeapi.co/api/v2/pokemon?limit=650',
     );
 
-    data.results.forEach(async ({ name, url }) => {
+    const pokemos: CreatePokemonDto[] = [];
+
+    data.results.forEach(({ name, url }) => {
       const secments = url.split('/');
       const no = +secments[secments.length - 2];
-      await this.pokemonModel.create({ name, no });
+      pokemos.push({ name, no });
     });
 
+    await this.pokemonModel.insertMany(pokemos);
     return 'data.results';
   }
 }
