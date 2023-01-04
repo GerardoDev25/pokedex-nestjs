@@ -8,11 +8,13 @@ import { PokemonModule } from './pokemon/pokemon.module';
 import { CommonModule } from './common/common.module';
 import { SeedModule } from './seed/seed.module';
 import { envConfig } from './common/config/app.config';
+import { joiValidationSchema } from './common/config/joi.validation';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [envConfig],
+      validationSchema: joiValidationSchema,
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../public/'),
