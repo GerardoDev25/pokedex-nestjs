@@ -7,31 +7,45 @@
 - 1. Clonar el repositorio
 
 - 2. Ejecutar
+
   ```
      yarn install
   ```
 
 - 3. Tener Nest CLI instalado
+
   ```
     npm i -g @nestjs/cli
   ```
 
 - 4. Levantar la base de datos
+
   ```
     docker-compose up -d
   ```
 
-- 5. clonar el archivo __.env.template__ y renombrarlo como __.env__
+- 5. clonar el archivo **.env.template** y renombrarlo como **.env**
 
-- 6. llenar las variables en el archivo __.env__
+- 6. llenar las variables en el archivo **.env**
 
-- 7. ejecutar el comando ```"yarn dev"```
+- 7. ejecutar el comando `"yarn dev"`
 
 - 8. Reconstruir la base de datos con la semilla
   ```
     http://localhost:3000/api/v2/seed
   ```
 
+# Production Build con __Docker__
+
+1. Crear el archivo `.env.prod`
+2. Llenar las variables de entorno de prod
+3. Crear la nueva imagen
+
+```
+docker-compose -f docker-compose.prod.yaml --env-file .env.prod up --build
+```
+
 ## Stack usado
-* MongoDB
-* Nest
+
+- MongoDB
+- Nest
